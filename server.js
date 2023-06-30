@@ -8,7 +8,12 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const server = require("http").Server(app);
 
-const io = socketio(server);
+const io = socketio(server, {
+  cors: {
+    origin: "https://localhost:5173",
+    methods: ["GET", "POST"]
+  }
+});
 
 app.use(express.json());
 app.use(cors());
