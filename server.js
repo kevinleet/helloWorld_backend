@@ -23,18 +23,19 @@ const io = require('socket.io')(server, {
   cors: {
     origin: "https://localhost:5173",
     methods: ["GET", "POST"]
-
   }
 });
 
 io.on("connection", (socket) => {
   console.log(`Socket ${socket.id} connected`);
 
-  // socket.on("sendMessage", (message) => {
-  //   io.emit("message", message);
-  // });
+  socket.on("sendMessage", (message) => {
+    io.emit("message", message);
+    console.log(message, socket.id)
+    
+  });
 
-  // socket.on("disconnect", () => {
-  //   console.log(`Socket ${socket.id} disconnected`);
-  // });
+  socket.on("disconnect", () => {
+    console.log(`Socket ${socket.id} disconnected`);
+  });
 });
