@@ -9,6 +9,16 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const getUserByEmail = async (req, res) => {
+  try {
+    let user = await User.find({ email: req.body.email });
+    res.json(user);
+  } catch (error) {
+    res.send(error);
+  }
+};
+
 module.exports = {
   getAllUsers,
+  getUserByEmail,
 };
