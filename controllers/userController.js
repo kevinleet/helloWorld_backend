@@ -11,8 +11,21 @@ const getAllUsers = async (req, res) => {
 
 const getUserByEmail = async (req, res) => {
   try {
-    let user = await User.find({ email: req.body.email });
+    let user = await User.findOne({ email: req.body.email });
     res.json(user);
+  } catch (error) {
+    res.send(error);
+  }
+};
+
+const createUser = async (req, res) => {
+  try {
+    let newUser = User.create({
+      email: req.body.email,
+      displayname: req.body.displayname,
+      password: req.body.password,
+    });
+    res.send(newUser);
   } catch (error) {
     res.send(error);
   }
@@ -21,4 +34,5 @@ const getUserByEmail = async (req, res) => {
 module.exports = {
   getAllUsers,
   getUserByEmail,
+  createUser,
 };
