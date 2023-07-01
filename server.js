@@ -3,12 +3,9 @@ const Router = require("./routes/AppRouter");
 const cors = require("cors");
 const db = require("./db");
 
-
 const PORT = process.env.PORT || 3001;
 const app = express();
 //const server = require("http").Server(app);
-
-
 
 app.use(express.json());
 app.use(cors());
@@ -19,11 +16,11 @@ const server = app.listen(PORT, () =>
   console.log(`Application is listening on port ${PORT}.`)
 );
 
-const io = require('socket.io')(server, {
+const io = require("socket.io")(server, {
   cors: {
-    origin: "https://localhost:5173",
-    methods: ["GET", "POST"]
-  }
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
 });
 
 io.on("connection", (socket) => {
@@ -36,7 +33,9 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", (message, room) => {
     io.emit("message", message);
-    console.log(message, socket.id)
+
+    console.log(message, socket.id);
+
   });
 
   
