@@ -25,11 +25,20 @@ const io = require("socket.io")(server, {
 
 io.on("connection", (socket) => {
   console.log(`Socket ${socket.id} connected`);
+  
+  socket.on('join chat', (room) => {
+    socket.join(room);
+    console.log(`User joined room ${room}`)
+  })
 
-  socket.on("sendMessage", (message) => {
+  socket.on("sendMessage", (message, room) => {
     io.emit("message", message);
+
     console.log(message, socket.id);
+
   });
+
+  
 
   socket.on("disconnect", () => {
     console.log(`Socket ${socket.id} disconnected`);
