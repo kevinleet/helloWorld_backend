@@ -9,6 +9,19 @@ const getAllChats = async (req, res) => {
   }
 };
 
+const getChatsByUser = async (req, res) => {
+  const { userId } = req.params
+  console.log(userId)
+  try {
+    let chats = await Chat.find({ users: { $in: userId } })
+    console.log('chats:', chats)
+    res.json(chats)
+  } catch (error) {
+    res.send(error)
+  }
+}
+
 module.exports = {
   getAllChats,
+  getChatsByUser
 };
