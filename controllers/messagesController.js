@@ -20,10 +20,7 @@ const sendMessage = async (req, res) => {
   }
 
   try {
-    let message = await Message.create(newMessage)
-    // message = await message.populate('sender').exec()
-    // message = await message.populate('chat').exec()
-    console.log(message)
+    let message = await (await Message.create(newMessage)).populate(['sender', 'chat'])
     res.send(message)
   } catch (error) {
     res.status(400)

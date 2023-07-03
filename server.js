@@ -40,14 +40,12 @@ io.on("connection", (socket) => {
 
   socket.on("new message", (newMessageRecieved) => {
     let chat = newMessageRecieved.chat
-    console.log(newMessageRecieved.chat)
-    // chat.users.forEach(user => {
-    //   if (user == newMessageRecieved.sender) return;
-    //   socket.in(user._id).emit('message recieved', newMessageRecieved)
-    // })
 
-    // console.log(message, socket.id);
-
+    chat.users.forEach(user => {
+      if (user == newMessageRecieved.sender) return;
+      socket.in(chat._id).emit("message recieved", newMessageRecieved)
+      console.log(chat)
+    })
   });
 
   
