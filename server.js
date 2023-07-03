@@ -17,6 +17,7 @@ const server = app.listen(PORT, () =>
 );
 
 const io = require("socket.io")(server, {
+  pingTimeout: 60000,
   cors: {
     origin: "http://localhost:5173",
     methods: ["GET", "POST"],
@@ -25,16 +26,27 @@ const io = require("socket.io")(server, {
 
 io.on("connection", (socket) => {
   console.log(`Socket ${socket.id} connected`);
+
+  socket.on('setup', (userData) => {
+    socket.join(userData._id)
+    console.log(userData._id)
+    socket.emit('connected')
+  })
   
   socket.on('join chat', (room) => {
     socket.join(room);
     console.log(`User joined room ${room}`)
   })
 
-  socket.on("sendMessage", (message, room) => {
-    io.emit("message", message);
+  socket.on("new message", (newMessageRecieved) => {
+    let chat = newMessageRecieved.chat
+    console.log(newMessageRecieved.chat)
+    // chat.users.forEach(user => {
+    //   if (user == newMessageRecieved.sender) return;
+    //   socket.in(user._id).emit('message recieved', newMessageRecieved)
+    // })
 
-    console.log(message, socket.id);
+    // console.log(message, socket.id);
 
   });
 
