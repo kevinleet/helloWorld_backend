@@ -2,8 +2,13 @@ const { Schema } = require("mongoose");
 
 const chatSchema = new Schema(
   {
-    messages: [{ type: String, required: true }],
-    users: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
+    chatName: { type: String, trim: true },
+    isGroupChat: { type: Boolean, default: false },
+    users: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    latestMessage: {
+      type: Schema.Types.ObjectId,
+      ref: "Message",
+    },
   },
   { timestamps: true }
 );
