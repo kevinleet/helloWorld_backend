@@ -12,7 +12,7 @@ mongoose
     console.log(`Connection Error: ${e.message}`);
   });
 
-mongoose.set("debug", false);
+mongoose.set("debug", true);
 mongoose.connection.on(
   "error",
   console.error.bind(console, "MongoDB Connection Error:")
