@@ -13,7 +13,11 @@ const getChatsByUser = async (req, res) => {
   const { userId } = req.params
   console.log(userId)
   try {
-    let chats = await Chat.find({ users: { $elemMatch: { $eq: '64a30f76c98654a8e7693d51' } } }).populate(['users', 'latestMessage'])
+    let chats = await Chat.find({ users: { $elemMatch: { $eq: '64a02d55d8ecc769e13dfc1d' } } }).populate(['users', 'latestMessage'])
+    // chats = await User.populate(chats, {
+    //   path: "latestMessage.sender",
+    //   //select: "name pic email",
+    // });
     console.log('chats:', chats)
     res.json(chats)
   } catch (error) {
