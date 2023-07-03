@@ -1,4 +1,4 @@
-const { Chat } = require("../models");
+const { Chat, User } = require("../models");
 
 const getAllChats = async (req, res) => {
   try {
@@ -13,12 +13,10 @@ const getChatsByUser = async (req, res) => {
   const { userId } = req.params
   console.log(userId)
   try {
-    let chats = await Chat.find({ users: { $elemMatch: { $eq: '64a02d55d8ecc769e13dfc1d' } } }).populate(['users', 'latestMessage'])
-    // chats = await User.populate(chats, {
-    //   path: "latestMessage.sender",
-    //   //select: "name pic email",
-    // });
+    let chats = await Chat.find({ users: { $elemMatch: { $eq: userId } } }).populate('users').populate({ path: 'latestMessage', populate: { path: 'sender', select: 'email displayname' } });
+   
     console.log('chats:', chats)
+    console.log('')
     res.json(chats)
   } catch (error) {
     res.send(error)

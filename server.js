@@ -28,9 +28,14 @@ io.on("connection", (socket) => {
   console.log(`Socket ${socket.id} connected`);
 
   socket.on('setup', (userData) => {
-    socket.join(userData._id)
+    try {
+      socket.join(userData._id)
     console.log(userData._id)
     socket.emit('connected')
+    } catch (error) {
+      console.log(error)
+    }
+    
   })
   
   socket.on('join chat', (room) => {
