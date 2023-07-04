@@ -12,7 +12,6 @@ const getAllMessages = async (req, res) => {
 
 const sendMessage = async (req, res) => {
   const { sender, content, chat } = req.body;
-
   let newMessage = {
     sender: sender,
     content: content,
