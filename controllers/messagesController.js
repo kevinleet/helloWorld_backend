@@ -20,6 +20,7 @@ const sendMessage = async (req, res) => {
 
   try {
     let message = await (await Message.create(newMessage)).populate(['sender', 'chat'])
+    await Chat.findByIdAndUpdate(message.chat, {latestMessage: message._id})
     //add this created message to the corresponsing chat 'latest message' attribute
     res.send(message)
   } catch (error) {
