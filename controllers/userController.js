@@ -34,8 +34,28 @@ const createUser = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const { userToDelete } = req.params
+    let userEmail = userToDelete
+
+    console.log(userEmail)
+
+    const userData = await User.deleteOne({ email: userEmail})
+    if(!userData) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    res.json(`${userEmail}'s account has been deleted!`)
+
+  } catch (error) {
+    res.send(error)
+  }
+}
+
 module.exports = {
   getAllUsers,
   getUserByEmail,
   createUser,
+  deleteUser
 };
