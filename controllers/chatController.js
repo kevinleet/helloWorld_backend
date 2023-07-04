@@ -13,7 +13,9 @@ const getChatsByUser = async (req, res) => {
   const { userId } = req.params
   console.log(userId)
   try {
-    let chats = await Chat.find({ users: { $elemMatch: { $eq: userId } } }).populate('users').populate({ path: 'latestMessage', populate: { path: 'sender', select: 'email displayname' } });
+    let chats = await Chat.find({ users: { $elemMatch: { $eq: userId } } })
+      .populate('users')
+      .populate({ path: 'latestMessage' , populate: { path: 'sender', select: 'email displayname' } });
    
     console.log('chats:', chats)
     console.log('')
