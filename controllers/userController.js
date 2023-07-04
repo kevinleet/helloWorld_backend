@@ -12,7 +12,7 @@ const getAllUsers = async (req, res) => {
 const getUserByEmail = async (req, res) => {
   try {
     let user = await User.findOne({ email: req.body.email }).populate({
-      path: "incomingrequests outgoingrequests",
+      path: "incomingrequests outgoingrequests friends",
       // populate: { path: "outgoingrequests" },
     });
     res.json(user);
