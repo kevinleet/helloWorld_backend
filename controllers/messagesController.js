@@ -3,7 +3,7 @@ const { Message, User, Chat } = require("../models");
 
 const getAllMessages = async (req, res) => {
   try {
-    let messages = await Message.find({chat: req.params.chatId});
+    let messages = await Message.find({chat: req.params.chatId}).populate({ path: 'sender', select: 'displayname' })
     res.json(messages);
   } catch (error) {
     res.send(error);
@@ -28,6 +28,8 @@ const sendMessage = async (req, res) => {
     res.status(400)
   }
 }
+
+
 
 
 
