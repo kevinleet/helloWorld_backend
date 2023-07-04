@@ -11,7 +11,10 @@ const getAllUsers = async (req, res) => {
 
 const getUserByEmail = async (req, res) => {
   try {
-    let user = await User.findOne({ email: req.body.email });
+    let user = await User.findOne({ email: req.body.email }).populate({
+      path: "incomingrequests outgoingrequests",
+      // populate: { path: "outgoingrequests" },
+    });
     res.json(user);
   } catch (error) {
     res.send(error);

@@ -7,6 +7,7 @@ const userSchema = new Schema(
     displayname: { type: String, required: true },
     incomingrequests: [{ type: Schema.Types.ObjectId, ref: "User" }],
     outgoingrequests: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   { timestamps: true }
 );
