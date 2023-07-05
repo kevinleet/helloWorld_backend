@@ -31,7 +31,7 @@ const main = async () => {
 
   const message1 = new Message({
     sender: '64a41390ff01f5542b35fca8',
-    content: 'yo yo yo',
+    content: 'yo yo yo B',
     chat: '64a329c84fdb155924a68683'
   })
   await message1.save()

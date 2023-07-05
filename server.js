@@ -45,10 +45,11 @@ io.on("connection", (socket) => {
 
   socket.on("new message", (newMessageRecieved) => {
     let chat = newMessageRecieved.chat
-
+console.log(chat)
     chat?.users.forEach(user => {
-      if (user == newMessageRecieved.sender) return;
-      socket.in(chat._id).emit("message recieved", newMessageRecieved)
+      if (user == newMessageRecieved.sender._id) return;
+      socket.in(user).emit("message recieved", newMessageRecieved)
+      console.log(`sent from ${newMessageRecieved.sender._id} to ${user}`)
     })
   });
 
