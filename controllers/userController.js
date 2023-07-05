@@ -34,6 +34,27 @@ const createUser = async (req, res) => {
   }
 };
 
+const updateDisplayName = async (req, res) => {
+  try {
+    const { userToUpdate } = req.params
+    const { newDisplayName } = req.body
+
+    const updatedUser = await User.findOneAndUpdate(
+      { email: userToUpdate },
+      { displayname: newDisplayName },
+      { new: true }
+    )
+
+    if(!updatedUser) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    res.json(updatedUser)
+  } catch(error) {
+    res.status(500).json({ message: 'Internal server error', error: error.message })
+  }
+}
+
 const deleteUser = async (req, res) => {
   try {
     const { userToDelete } = req.params
@@ -57,5 +78,6 @@ module.exports = {
   getAllUsers,
   getUserByEmail,
   createUser,
+  updateDisplayName,
   deleteUser
 };
