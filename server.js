@@ -3,9 +3,8 @@ const Router = require("./routes/AppRouter");
 const cors = require("cors");
 const db = require("./db");
 
-const PORT = process.env.PORT || 3001;
+const { PORT, ORIGIN } = require("./config");
 const app = express();
-//const server = require("http").Server(app);
 
 app.use(express.json());
 app.use(cors());
@@ -19,27 +18,31 @@ const server = app.listen(PORT, () =>
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "*:*",
+    origin: ORIGIN,
     methods: ["GET", "POST"],
   },
 });
 
 io.on("connection", (socket) => {
-  //console.log(`Socket ${socket.id} connected`);
-
   socket.on("setup", (userData) => {
     try {
-      socket.join(userData._id);
-      console.log(userData._id);
-      socket.emit("connected");
+      if (userData) {
+        socket.join(userData._id);
+        console.log(
+          `${userData.displayname} has connected. User ID: ${userData._id} `
+        );
+        socket.emit("connected");
+      }
     } catch (error) {
       console.log(error);
     }
   });
 
-  socket.on("join chat", (room) => {
+  socket.on("join chat", (room, currentUser) => {
     socket.join(room);
-    console.log(`User joined room ${room}`);
+    if (room) {
+      console.log(`${currentUser.displayname} joined room. Chat ID: ${room}`);
+    }
   });
 
   socket.on("new message", (newMessageRecieved) => {
