@@ -41,17 +41,17 @@ io.on("connection", (socket) => {
   socket.on("join chat", (room, currentUser) => {
     socket.join(room);
     if (room) {
-      console.log(`${currentUser.displayname} joined room. Chat ID: ${room}`);
+      //console.log(`${currentUser.displayname} joined room. Chat ID: ${room}`);
     }
   });
 
-  socket.on("new message", (newMessageRecieved) => {
-    let chat = newMessageRecieved.chat;
+  socket.on("new message", (newMessageReceived) => {
+    let chat = newMessageReceived.chat;
     console.log(chat);
     chat?.users.forEach((user) => {
-      if (user == newMessageRecieved.sender._id) return;
-      socket.in(user).emit("message recieved", newMessageRecieved);
-      console.log(`sent from ${newMessageRecieved.sender._id} to ${user}`);
+      if (user == newMessageReceived.sender._id) return;
+      socket.in(user).emit("message received", newMessageReceived);
+      console.log(`sent from ${newMessageReceived.sender._id} to ${user}`);
     });
   });
 
