@@ -28,22 +28,38 @@ const createRequest = async (req, res) => {
 const acceptRequest = async (req, res) => {
   try {
     let { sender, recipient } = req.body;
+
+    // Remove recipient from sender's outgoingrequests and add to friends if not already present
+    let senderUser = await User.findOneAndUpdate(
+      {
+        _id: sender,
+        outgoingrequests: recipient, // Only remove if recipient is present in outgoingrequests
+        friends: { $ne: recipient }, // Add to friends only if recipient is not already present
+      },
+      {
+        $pull: { outgoingrequests: recipient },
+        $push: { friends: recipient },
+      }
+    );
+
+    // Remove sender from recipient's incomingrequests and add to friends if not already present
+    let recipientUser = await User.findOneAndUpdate(
+      {
+        _id: recipient,
+        incomingrequests: sender, // Only remove if sender is present in incomingrequests
+        friends: { $ne: sender }, // Add to friends only if sender is not already present
+      },
+      {
+        $pull: { incomingrequests: sender },
+        $push: { friends: sender },
+      }
+    );
+
     let deletedRequest = await Request.findOneAndDelete({
       sender: sender,
       recipient: recipient,
     });
-    let senderUser = await User.findOneAndUpdate(
-      {
-        _id: sender,
-      },
-      { $pull: { outgoingrequests: recipient }, $push: { friends: recipient } }
-    );
-    let recipientUser = await User.findOneAndUpdate(
-      {
-        _id: recipient,
-      },
-      { $pull: { incomingrequests: sender }, $push: { friends: sender } }
-    );
+
     res.send(deletedRequest);
   } catch (error) {
     res.send(error);
