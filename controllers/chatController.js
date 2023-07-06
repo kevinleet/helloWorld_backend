@@ -25,7 +25,17 @@ const getChatsByUser = async (req, res) => {
   }
 }
 
+const createChat = async (req, res) => {
+  try {
+    let newChat = await Chat.create(req.body)
+    res.send(newChat)
+  } catch (error) {
+    res.send(error)
+  }
+}
+
 module.exports = {
   getAllChats,
-  getChatsByUser
+  getChatsByUser,
+  createChat
 };
