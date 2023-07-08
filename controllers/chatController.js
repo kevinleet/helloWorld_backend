@@ -46,8 +46,36 @@ const createChat = async (req, res) => {
   }
 };
 
+const createGPTChat = async (req, res) => {
+  console.log
+  try {
+    let gptChat = await Chat.create({ users: [req.body.user1], isChatGPT: true })
+    console.log(gptChat)
+    res.send(gptChat)
+  } catch (error) {
+    res.send(error.message)
+  }
+}
+
+const getGPTchat = async (req, res) => {
+  console.log('gpt id', req.params.user)
+  try {
+    let gptChat = await Chat.findOne({
+      users: req.params.user,
+      isChatGPT: true,
+    });
+    console.log(gptChat)
+    res.send(gptChat)
+  } catch (error) {
+    console.log(error)
+    res.send(error.message)
+  }
+}
+
 module.exports = {
   getAllChats,
   getChatsByUser,
   createChat,
+  createGPTChat,
+  getGPTchat
 };
