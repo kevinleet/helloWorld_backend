@@ -1,4 +1,5 @@
 const { User } = require("../models");
+const { Chat } = require("../models");
 
 const getAllUsers = async (req, res) => {
   try {
@@ -49,8 +50,29 @@ const updateDisplayName = async (req, res) => {
     const { newDisplayName } = req.body
 
     const updatedUser = await User.findOneAndUpdate(
-      { email: userToUpdate },
+      { _id: userToUpdate },
       { displayname: newDisplayName },
+      { new: true }
+    )
+
+    if(!updatedUser) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    res.json(updatedUser)
+  } catch(error) {
+    res.status(500).json({ message: 'Internal server error', error: error.message })
+  }
+}
+
+const updateEmail = async (req, res) => {
+  try {
+    const { emailToUpdate } = req.params
+    const { newEmail } = req.body
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: emailToUpdate },
+      { email: newEmail },
       { new: true }
     )
 
@@ -67,16 +89,23 @@ const updateDisplayName = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const { userToDelete } = req.params
-    let userEmail = userToDelete
+    let userId = userToDelete
 
-    console.log(userEmail)
+    const usersToUpdate = await User.find({ friends: userId })
 
-    const userData = await User.deleteOne({ email: userEmail})
+    const updatePromises = usersToUpdate.map((user) => User.updateOne({ _id: user._id }, { $pull: {friends: userId } })
+    )
+
+    await Promise.all(updatePromises)
+
+    const chatsToDelete = await Chat.deleteMany({ users: userId })
+
+    const userData = await User.deleteOne({ _id: userId})
     if(!userData) {
       return res.status(404).json({ message: 'User not found' })
     }
 
-    res.json(`${userEmail}'s account has been deleted!`)
+    res.json(`This account has been deleted!`)
 
   } catch (error) {
     res.send(error)
@@ -89,5 +118,6 @@ module.exports = {
   getUserById,
   createUser,
   updateDisplayName,
+  updateEmail,
   deleteUser
 };
